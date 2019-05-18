@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Unity.Entities;
 
-struct RotationSpeed : IComponentData
+public struct RotationSpeed : IComponentData
 {
     public float speed;
 }
