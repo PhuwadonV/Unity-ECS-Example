@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [StructLayout(LayoutKind.Explicit)]
 struct Union
@@ -59,15 +60,18 @@ unsafe class ColorClass
 class TestUnsafe
 {
     [RuntimeInitializeOnLoadMethod]
-    static void Start()
+    static void OnLoad()
     {
-        TestPointer(100);
-        Debug.Log("<color=red>Union</color>");
-        TestUnion();
-        Debug.Log("<color=red>PointPack4</color>");
-        TestPointPack4();
-        Debug.Log("<color=red>PointPack2</color>");
-        TestPointPack2();
+        if (SceneManager.GetActiveScene().name.Equals("Unsafe"))
+        {
+            TestPointer(100);
+            Debug.Log("<color=red>Union</color>");
+            TestUnion();
+            Debug.Log("<color=red>PointPack4</color>");
+            TestPointPack4();
+            Debug.Log("<color=red>PointPack2</color>");
+            TestPointPack2();
+        }
     }
 
     private static async void TestPointer(int count)
