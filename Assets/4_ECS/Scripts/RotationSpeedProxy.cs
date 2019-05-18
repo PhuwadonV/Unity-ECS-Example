@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using Unity.Entities;
 
+struct RotationSpeed : IComponentData
+{
+    public float speed;
+}
+
 [AddComponentMenu("ECS/RotationSpeed")]
 [RequireComponent(typeof(ConvertToEntity))]
 [RequiresEntityConversion]
