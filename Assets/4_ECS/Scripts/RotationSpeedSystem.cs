@@ -6,22 +6,15 @@ using Unity.Transforms;
 
 class RotationSpeedSystem : ComponentSystem
 {
-    private bool checkScene = false;
-
-    protected override void OnUpdate()
+    protected override void OnCreate()
     {
-        if (!checkScene && !SceneManager.GetActiveScene().name.Equals("ECS"))
+        if (!SceneManager.GetActiveScene().name.Equals("ECS"))
         {
             Enabled = false;
-            checkScene = true;
-        }
-        else
-        {
-            OnUpdateWithCheckScene();
         }
     }
 
-    private void OnUpdateWithCheckScene()
+    protected override void OnUpdate()
     {
         Entities.ForEach((ref Rotation rotation, ref RotationSpeed rotationSpeed) =>
             rotation.Value = math.mul(math.normalize(rotation.Value), quaternion.AxisAngle(math.up(), rotationSpeed.speed * Time.deltaTime))

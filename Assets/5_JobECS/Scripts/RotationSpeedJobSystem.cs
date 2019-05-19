@@ -20,23 +20,15 @@ struct RotationSpeedJob : IJobForEach<Rotation, RotationSpeed>
 
 class RotationSpeedJobSystem : JobComponentSystem
 {
-    private bool checkScene = false;
-
-    protected override JobHandle OnUpdate(JobHandle inputDependencies)
+    protected override void OnCreate()
     {
-        if (!checkScene && !SceneManager.GetActiveScene().name.Equals("JobECS"))
+        if (!SceneManager.GetActiveScene().name.Equals("JobECS"))
         {
             Enabled = false;
-            checkScene = true;
-            return new JobHandle();
-        }
-        else
-        {
-            return OnUpdateWithCheckScene(inputDependencies);
         }
     }
 
-    private JobHandle OnUpdateWithCheckScene(JobHandle inputDependencies)
+    protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
         var job = new RotationSpeedJob()
         {
