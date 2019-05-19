@@ -44,7 +44,28 @@
  * [World](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.World.html)
 ## Class : Abstract
  * [SharedComponentDataProxy](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.SharedComponentDataProxy-1.html)
-## MonoBehavior
+## Class : MonoBehavior
  * [GameObjectEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.GameObjectEntity.html)
  * [StaticOptimizeEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.StaticOptimizeEntity.html)
  * [ConvertToEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.ConvertToEntity.html)
+ ## Class : Static
+ * ChangeVersionUtility
+ * ComponentGroupExtensionsForGameObjectArray
+ * DefaultTinyWorldInitialization
+ * DefaultWorldInitialization
+ * DiffUtil
+ * EntityBatchInChunkUtility
+ * EntityManagerExtensions
+ * EntityQueryExtensionsForComponentArray
+ * EntityQueryExtensionsForTransformAccessArray
+ * EntityRemapUtility
+ * FastEquality
+ * GameObjectConversionUtility
+ * HashMapUtility
+ * JobChunkExtensions
+ * JobForEachExtensions
+ * PlayerLoopManager
+ * ScriptBehaviourUpdateOrder
+ * TypeManager
+ * WorldObsoleteExtensions
+ * WorldDiffer
