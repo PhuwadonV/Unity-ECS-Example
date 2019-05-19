@@ -11,5 +11,5 @@
 * [Manual](https://docs.unity3d.com/Packages/com.unity.burst@0.2/manual/index.html)
 ## Entities
 * Exception
-..* CircularSystemDependencyException
-..* EntityQueryDescValidationException
+  * CircularSystemDependencyException
+  * EntityQueryDescValidationException
