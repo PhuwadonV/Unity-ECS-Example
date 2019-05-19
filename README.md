@@ -44,8 +44,6 @@
 * [TypeHash](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.TypeHash.html)
 * [WordStorage](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.WordStorage.html)
 * [World](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.World.html)
-### Class : Abstract
-* [SharedComponentDataProxy](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.SharedComponentDataProxy-1.html)
 ### Class : MonoBehavior
 * [GameObjectEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.GameObjectEntity.html)
 * [StaticOptimizeEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.StaticOptimizeEntity.html)
