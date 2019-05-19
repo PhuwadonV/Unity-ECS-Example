@@ -34,17 +34,17 @@
  * [WorldSystemFilterAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.WorldSystemFilterAttribute.html)
  * [WriteGroupAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.WriteGroupAttribute.html)
 ## Class
- * EntityContainerPropertyBag
- * EntityManager
- * EntityManager.EntityManagerDebug
- * EntityQuery
- * EntityQueryDesc
- * TypeHash
- * WordStorage
- * World
+ * [EntityContainerPropertyBag](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.EntityContainerPropertyBag.html)
+ * [EntityManager](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.EntityManager.html)
+ * [EntityManager.EntityManagerDebug](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.EntityManager.EntityManagerDebug.html)
+ * [EntityQuery](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.EntityQuery.html)
+ * [EntityQueryDesc](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.EntityQueryDesc.html)
+ * [TypeHash](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.TypeHash.html)
+ * [WordStorage](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.WordStorage.html)
+ * [World](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.World.html)
 ## Class : Abstract
-    SharedComponentDataProxy
+ * [SharedComponentDataProxy](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.SharedComponentDataProxy-1.html)
 ## MonoBehavior
- * GameObjectEntity
- * StaticOptimizeEntity
- * ConvertToEntity
+ * [GameObjectEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.GameObjectEntity.html)
+ * [StaticOptimizeEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.StaticOptimizeEntity.html)
+ * [ConvertToEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.ConvertToEntity.html)
