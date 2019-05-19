@@ -33,3 +33,18 @@
  * [UpdateInGroupAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.UpdateInGroupAttribute.html)
  * [WorldSystemFilterAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.WorldSystemFilterAttribute.html)
  * [WriteGroupAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.WriteGroupAttribute.html)
+## Class
+ * EntityContainerPropertyBag
+ * EntityManager
+ * EntityManager.EntityManagerDebug
+ * EntityQuery
+ * EntityQueryDesc
+ * TypeHash
+ * WordStorage
+ * World
+## Class : Abstract
+    SharedComponentDataProxy
+## MonoBehavior
+ * GameObjectEntity
+ * StaticOptimizeEntity
+ * ConvertToEntity
