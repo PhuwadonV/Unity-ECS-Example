@@ -10,10 +10,10 @@
 # Burst
 * [Manual](https://docs.unity3d.com/Packages/com.unity.burst@0.2/manual/index.html)
 # Entities
-**Exception**
+## Exception
   * [CircularSystemDependencyException](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.CircularSystemDependencyException.html)
   * [EntityQueryDescValidationException](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.EntityQueryDescValidationException.html)
-**Attribute**
+## Attribute
  * [AlwaysUpdateSystemAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.AlwaysUpdateSystemAttribute.html)
  * [ChangedFilterAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.ChangedFilterAttribute.html)
  * [DisableAutoCreationAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.0/api/Unity.Entities.DisableAutoCreationAttribute.html)
