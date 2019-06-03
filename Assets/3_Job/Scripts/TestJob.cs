@@ -4,10 +4,21 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Jobs.LowLevel.Unsafe;
 using Unity.Mathematics;
 using Unity.Burst;
 
 delegate R Func<R, A0, A1, A2>(A0 a0, A1 a1, A2 a2);
+
+enum CompareType
+{
+    Equal,
+    NotEqual,
+    MoreThan,
+    MoreThanOrEqual,
+    LessThan,
+    LessThanOrEqual
+}
 
 [BurstCompile]
 struct AddAllJob : IJob
@@ -91,6 +102,110 @@ struct HeavyJob : IJobParallelFor
     }
 }
 
+[BurstCompile]
+struct FilterJobParallelFor : IJobParallelFor
+{
+    [ReadOnly]
+    public CompareType compareType;
+    [ReadOnly]
+    public float compareValue;
+    [ReadOnly]
+    public NativeArray<float> src;
+    [WriteOnly]
+    public NativeQueue<float>.Concurrent results;
+
+    public void Execute(int index)
+    {
+        float value = src[index];
+        switch (compareType)
+        {
+            case CompareType.Equal:
+                {
+                    if (value == compareValue)
+                    {
+                        results.Enqueue(value);
+                    }
+                }
+                break;
+            case CompareType.NotEqual:
+                {
+                    if (value != compareValue)
+                    {
+                        results.Enqueue(value);
+                    }
+                }
+                break;
+            case CompareType.MoreThan:
+                {
+                    if (value > compareValue)
+                    {
+                        results.Enqueue(value);
+                    }
+                }
+                break;
+            case CompareType.MoreThanOrEqual:
+                {
+                    if (value >= compareValue)
+                    {
+                        results.Enqueue(value);
+                    }
+                }
+                break;
+            case CompareType.LessThan:
+                {
+                    if (value < compareValue)
+                    {
+                        results.Enqueue(value);
+                    }
+                }
+                break;
+            case CompareType.LessThanOrEqual:
+                {
+                    if (value <= compareValue)
+                    {
+                        results.Enqueue(value);
+                    }
+                }
+                break;
+        }
+    }
+}
+
+[BurstCompile]
+struct MinMaxIntJobParallelFor : IJobParallelFor
+{
+    [ReadOnly]
+    public NativeArray<int> candidates;
+
+    [WriteOnly]
+    public NativeMinMaxInt.Concurrent result;
+
+    public void Execute(int index)
+    {
+        result.SendCandidate(candidates[index]);
+    }
+}
+
+[BurstCompile]
+struct MapIntJobParallelFor : IJobParallelFor
+{
+    [ReadOnly]
+    [DeallocateOnJobCompletion]
+    public NativeArray<int> from;
+
+    [ReadOnly]
+    [DeallocateOnJobCompletion]
+    public NativeMapInt map;
+
+    [WriteOnly]
+    public NativeArray<int> to;
+
+    public void Execute(int index)
+    {
+        to[index] = map.Get(from[index]);
+    }
+}
+
 class TestJob
 {
     private const int ARRAY_SIZE = 5;
@@ -101,6 +216,9 @@ class TestJob
     {
         if (SceneManager.GetActiveScene().name.Equals("Job"))
         {
+            Debug.Log($"Cahce Line : {JobsUtility.CacheLineSize} Bytes");
+            Debug.Log($"Max Job Thread Count : {JobsUtility.MaxJobThreadCount}");
+
             Debug.Log("<color=red>IJob</color>");
             TestIJob();
 
@@ -109,6 +227,15 @@ class TestJob
 
             Debug.Log("<color=red>ScheduleBatchedJobs</color>");
             TestScheduleBatchedJobs();
+
+            Debug.Log("<color=red>NativeContainer.Concurrent</color>");
+            TestNativeContainerConcurrent();
+
+            Debug.Log("<color=red>Custom NativeContainer</color>");
+            TestCustomNativeContainerConcurrent();
+
+            Debug.Log("<color=red>DeallocateOnJobCompletion</color>");
+            TestDeallocateOnJobCompletion();
         }
     }
 
@@ -162,7 +289,7 @@ class TestJob
     private static void TestScheduleBatchedJobs()
     {
         var stopwatch = new System.Diagnostics.Stopwatch();
-        NativeArray<float> values = new NativeArray<float>(BIG_ARRAY_SIZE, Allocator.Persistent);
+        NativeArray<float> values = new NativeArray<float>(BIG_ARRAY_SIZE, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
 
         for (int i = 0; i < ARRAY_SIZE; i++)
         {
@@ -189,9 +316,9 @@ class TestJob
 
     private static void TestJobOrJobParallelFor(Func<JobHandle, NativeArray<float4>, NativeArray<float4>, NativeArray<float4>> func)
     {
-        NativeArray<float4> values1 = new NativeArray<float4>(ARRAY_SIZE, Allocator.TempJob);
-        NativeArray<float4> values2 = new NativeArray<float4>(ARRAY_SIZE, Allocator.TempJob);
-        NativeArray<float4> results = new NativeArray<float4>(ARRAY_SIZE, Allocator.Persistent);
+        NativeArray<float4> values1 = new NativeArray<float4>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        NativeArray<float4> values2 = new NativeArray<float4>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        NativeArray<float4> results = new NativeArray<float4>(ARRAY_SIZE, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
 
         for (int i = 0; i < ARRAY_SIZE; i++)
         {
@@ -211,15 +338,94 @@ class TestJob
         results.Dispose();
     }
 
-    private static void Print5Float4NativeArray(NativeArray<float4> float4s)
+    private static void TestNativeContainerConcurrent()
     {
-        Debug.Log(addAllFloat4(float4s[0]) + ", " +
-            addAllFloat4(float4s[1]) + ", " +
-            addAllFloat4(float4s[2]) + ", " +
-            addAllFloat4(float4s[3]));
+        NativeArray<float> values = new NativeArray<float>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        NativeQueue<float> result = new NativeQueue<float>(Allocator.Persistent);
+        result.Enqueue(10);
+        result.Enqueue(11);
+        result.Enqueue(12);
+
+        for (int i = 0; i < ARRAY_SIZE; i++)
+        {
+            values[i] = i;
+        }
+
+        FilterJobParallelFor filterJob = new FilterJobParallelFor();
+        filterJob.compareType = CompareType.MoreThan;
+        filterJob.compareValue = 2;
+        filterJob.src = values;
+        filterJob.results = result.ToConcurrent();
+
+        JobHandle filterJobHandle = filterJob.Schedule(ARRAY_SIZE, 1);
+        filterJobHandle.Complete();
+
+        Print5FloatNativeQueue(result);
+
+        values.Dispose();
+        result.Dispose();
     }
 
-    private static float addAllFloat4(float4 f4)
+    private static void TestCustomNativeContainerConcurrent()
+    {
+        NativeArray<int> candidates = new NativeArray<int>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        NativeMinMaxInt result = new NativeMinMaxInt(MinMax.Max, Allocator.Persistent);
+
+        for (int i = 0; i < ARRAY_SIZE; i++)
+        {
+            candidates[i] = (i * 10) + 10;
+        }
+
+        MinMaxIntJobParallelFor minMaxintJob = new MinMaxIntJobParallelFor();
+        minMaxintJob.candidates = candidates;
+        minMaxintJob.result = result;
+
+        JobHandle minMaxIntJobHandle = minMaxintJob.Schedule(ARRAY_SIZE, 1);
+        minMaxIntJobHandle.Complete();
+
+        Debug.Log(result.Value);
+
+        candidates.Dispose();
+        result.Dispose();
+    }
+
+    private static void TestDeallocateOnJobCompletion()
+    {
+        NativeArray<int> from = new NativeArray<int>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        NativeArray<int> to = new NativeArray<int>(ARRAY_SIZE, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        NativeMapInt map = new NativeMapInt(3, -1, Allocator.Persistent);
+
+        map.Set(0, 1, 5);
+        map.Set(1, 2, 7);
+        map.Set(2, 4, 9);
+
+        for (int i = 0; i < ARRAY_SIZE; i++)
+        {
+            from[i] = i;
+        }
+
+        MapIntJobParallelFor mapIntJob = new MapIntJobParallelFor();
+        mapIntJob.from = from;
+        mapIntJob.map = map;
+        mapIntJob.to = to;
+
+        JobHandle mapIntJobHandle = mapIntJob.Schedule(ARRAY_SIZE, 1);
+        mapIntJobHandle.Complete();
+
+        Print5IntNativeArray(to);
+
+        to.Dispose();
+    }
+
+    private static void Print5Float4NativeArray(NativeArray<float4> float4s)
+    {
+        Debug.Log(AddAllFloat4(float4s[0]) + ", " +
+            AddAllFloat4(float4s[1]) + ", " +
+            AddAllFloat4(float4s[2]) + ", " +
+            AddAllFloat4(float4s[3]));
+    }
+
+    private static float AddAllFloat4(float4 f4)
     {
         return f4.w + f4.x + f4.y + f4.z;
     }
@@ -227,5 +433,15 @@ class TestJob
     private static void Print5FloatNativeArray(NativeArray<float> floats)
     {
         Debug.Log($"{floats[0]}, {floats[1]}, {floats[2]}, {floats[3]}, {floats[4]}");
+    }
+
+    private static void Print5IntNativeArray(NativeArray<int> ints)
+    {
+        Debug.Log($"{ints[0]}, {ints[1]}, {ints[2]}, {ints[3]}, {ints[4]}");
+    }
+
+    private static void Print5FloatNativeQueue(NativeQueue<float> queue)
+    {
+        Debug.Log($"{queue.Dequeue()}, {queue.Dequeue()}, {queue.Dequeue()}, {queue.Dequeue()}, {queue.Dequeue()}");
     }
 }
