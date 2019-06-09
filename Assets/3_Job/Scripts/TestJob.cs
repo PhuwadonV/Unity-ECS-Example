@@ -56,7 +56,7 @@ struct AddJob : IJob
 }
 
 [BurstCompile]
-struct AddAllJobbParallelFor : IJobParallelFor
+struct AddAllParallelForJob : IJobParallelFor
 {
     public float adder;
     // ReadWrite
@@ -69,7 +69,7 @@ struct AddAllJobbParallelFor : IJobParallelFor
 }
 
 [BurstCompile]
-struct AddJobParallelFor : IJobParallelFor
+struct AddParallelForJob : IJobParallelFor
 {
     [ReadOnly]
     public NativeArray<float4> a;
@@ -103,7 +103,7 @@ struct HeavyJob : IJobParallelFor
 }
 
 [BurstCompile]
-struct FilterJobParallelFor : IJobParallelFor
+struct FilterParallelForJob : IJobParallelFor
 {
     [ReadOnly]
     public CompareType compareType;
@@ -172,7 +172,7 @@ struct FilterJobParallelFor : IJobParallelFor
 }
 
 [BurstCompile]
-struct MinMaxIntJobParallelFor : IJobParallelFor
+struct MinMaxIntParallelForJob : IJobParallelFor
 {
     [ReadOnly]
     public NativeArray<int> candidates;
@@ -187,7 +187,7 @@ struct MinMaxIntJobParallelFor : IJobParallelFor
 }
 
 [BurstCompile]
-struct MapIntJobParallelFor : IJobParallelFor
+struct MapIntParallelForJob : IJobParallelFor
 {
     [ReadOnly]
     [DeallocateOnJobCompletion]
@@ -203,6 +203,33 @@ struct MapIntJobParallelFor : IJobParallelFor
     public void Execute(int index)
     {
         to[index] = map.Get(from[index]);
+    }
+}
+
+[BurstCompile]
+struct AddWithIntJob : IJobWithInt
+{
+    // Read-Write
+    public NativeArray<int> result;
+
+    public void Execute(int value)
+    {
+        for (int i = 0; i < result.Length; i++)
+        {
+            result[i] += value;
+        }
+    }
+}
+
+[BurstCompile]
+struct WriteJobIndexParallelForJob : IJobParallelForWithJobIndex
+{
+    [WriteOnly]
+    public NativeArray<int> result;
+
+    public void Execute(int index, int jobIndex)
+    {
+        result[index] = jobIndex;
     }
 }
 
@@ -236,6 +263,12 @@ class TestJob
 
             Debug.Log("<color=red>DeallocateOnJobCompletion</color>");
             TestDeallocateOnJobCompletion();
+
+            Debug.Log("<color=red>Custom Job</color>");
+            TestCustomJob();
+
+            Debug.Log("<color=red>Custom JobParallelFor</color>");
+            TestCustomJobParallelFor();
         }
     }
 
@@ -267,17 +300,17 @@ class TestJob
     {
         TestJobOrJobParallelFor((values1, values2, results) =>
         {
-            AddAllJobbParallelFor addAllJob1 = new AddAllJobbParallelFor();
+            AddAllParallelForJob addAllJob1 = new AddAllParallelForJob();
             addAllJob1.adder = 1;
             addAllJob1.values = values1;
             JobHandle addAllJob1Handle = addAllJob1.Schedule(ARRAY_SIZE, 1);
 
-            AddAllJobbParallelFor addAllJob2 = new AddAllJobbParallelFor();
+            AddAllParallelForJob addAllJob2 = new AddAllParallelForJob();
             addAllJob2.adder = 1;
             addAllJob2.values = values2;
             JobHandle addAllJob2Handle = addAllJob2.Schedule(ARRAY_SIZE, 1);
 
-            AddJobParallelFor addJob = new AddJobParallelFor();
+            AddParallelForJob addJob = new AddParallelForJob();
             addJob.a = values1;
             addJob.b = values2;
             addJob.result = results;
@@ -351,7 +384,7 @@ class TestJob
             values[i] = i;
         }
 
-        FilterJobParallelFor filterJob = new FilterJobParallelFor();
+        FilterParallelForJob filterJob = new FilterParallelForJob();
         filterJob.compareType = CompareType.MoreThan;
         filterJob.compareValue = 2;
         filterJob.src = values;
@@ -376,7 +409,7 @@ class TestJob
             candidates[i] = (i * 10) + 10;
         }
 
-        MinMaxIntJobParallelFor minMaxintJob = new MinMaxIntJobParallelFor();
+        MinMaxIntParallelForJob minMaxintJob = new MinMaxIntParallelForJob();
         minMaxintJob.candidates = candidates;
         minMaxintJob.result = result;
 
@@ -404,7 +437,7 @@ class TestJob
             from[i] = i;
         }
 
-        MapIntJobParallelFor mapIntJob = new MapIntJobParallelFor();
+        MapIntParallelForJob mapIntJob = new MapIntParallelForJob();
         mapIntJob.from = from;
         mapIntJob.map = map;
         mapIntJob.to = to;
@@ -415,6 +448,41 @@ class TestJob
         Print5IntNativeArray(to);
 
         to.Dispose();
+    }
+
+    private static void TestCustomJob()
+    {
+        NativeArray<int> result = new NativeArray<int>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+
+        for (int i = 0; i < ARRAY_SIZE; i++)
+        {
+            result[i] = i;
+        }
+
+        AddWithIntJob addWithIntJob = new AddWithIntJob();
+        addWithIntJob.result = result;
+
+        JobHandle addWithIntJobHandle = addWithIntJob.ScheduleWithInt(ARRAY_SIZE);
+        addWithIntJobHandle.Complete();
+
+        Print5IntNativeArray(result);
+
+        result.Dispose();
+    }
+
+    private static void TestCustomJobParallelFor()
+    {
+        NativeArray<int> result = new NativeArray<int>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+
+        WriteJobIndexParallelForJob writeJobIndexJob = new WriteJobIndexParallelForJob();
+        writeJobIndexJob.result = result;
+
+        JobHandle writeJobIndexJobHandle = writeJobIndexJob.Schedule(ARRAY_SIZE, 2);
+        writeJobIndexJobHandle.Complete();
+
+        Print5IntNativeArray(result);
+
+        result.Dispose();
     }
 
     private static void Print5Float4NativeArray(NativeArray<float4> float4s)
