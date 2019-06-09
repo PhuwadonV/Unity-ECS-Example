@@ -84,7 +84,10 @@ class TestUnsafe
             await Task.Delay(1000);
         }
 
-        Camera.main.backgroundColor = Color.clear;
+        if (Camera.main)
+        {
+            Camera.main.backgroundColor = Color.clear;
+        }
     }
 
     private unsafe static void TestStructPointer()
@@ -96,7 +99,10 @@ class TestUnsafe
         ModifyStruct(&color);
         ModifyFloat(&color.g);
 
-        Camera.main.backgroundColor = new Color(color.r, color.g, *color.b, 0);
+        if (Camera.main)
+        {
+            Camera.main.backgroundColor = new Color(color.r, color.g, *color.b, 0);
+        }
     }
 
     private unsafe static void TestClassPointer()
@@ -110,7 +116,10 @@ class TestUnsafe
             ModifyFloat(pClassGreen);
         }
 
-        Camera.main.backgroundColor = new Color(color.r, color.g, *color.b, 0);
+        if (Camera.main)
+        {
+            Camera.main.backgroundColor = new Color(color.r, color.g, *color.b, 0);
+        }
     }
 
     private static void TestUnion()
