@@ -1,6 +1,5 @@
 using static System.Threading.Interlocked;
 
-using System;
 using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
@@ -152,13 +151,16 @@ unsafe struct NativeMinMaxInt
                         do
                         {
                             expectValue = *m_MinOrMax;
-                            realValue = expectValue;
 
                             if (candidate < expectValue)
                             {
                                 realValue = CompareExchange(ref *m_MinOrMax, candidate, expectValue);
                             }
-                        } while (expectValue != realValue);
+                            else
+                            {
+                                realValue = expectValue;
+                            }
+                        } while (realValue != expectValue);
                     }
                     break;
                 case MinMax.Max:
@@ -166,13 +168,16 @@ unsafe struct NativeMinMaxInt
                         do
                         {
                             expectValue = *m_MinOrMax;
-                            realValue = expectValue;
 
                             if (candidate > expectValue)
                             {
                                 realValue = CompareExchange(ref *m_MinOrMax, candidate, expectValue);
                             }
-                        } while (expectValue != realValue);
+                            else
+                            {
+                                realValue = expectValue;
+                            }
+                        } while (realValue != expectValue);
                     }
                     break;
             }
