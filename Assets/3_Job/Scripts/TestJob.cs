@@ -330,11 +330,11 @@ class TestJob
         }
 
         HeavyJob heavyJob = new HeavyJob();
-        heavyJob.weight = 1000;
+        heavyJob.weight = 500;
         heavyJob.values = values;
         JobHandle heavyJobHandle = heavyJob.Schedule(BIG_ARRAY_SIZE, 16);
 
-        JobHandle.ScheduleBatchedJobs();
+        //JobHandle.ScheduleBatchedJobs();
 
         System.Threading.Thread.Sleep(5);
         stopwatch.Start();
