@@ -334,7 +334,7 @@ class TestJob
         heavyJob.values = values;
         JobHandle heavyJobHandle = heavyJob.Schedule(BIG_ARRAY_SIZE, 16);
 
-        //JobHandle.ScheduleBatchedJobs();
+        JobHandle.ScheduleBatchedJobs();
 
         System.Threading.Thread.Sleep(5);
         stopwatch.Start();
