@@ -1,12 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Jobs.LowLevel.Unsafe;
 using Unity.Mathematics;
 using Unity.Burst;
-
-delegate R Func<R, A0, A1, A2>(A0 a0, A1 a1, A2 a2);
 
 enum CompareType
 {
@@ -345,7 +344,7 @@ class TestJob
         values.Dispose();
     }
 
-    private static void TestJobOrJobParallelFor(Func<JobHandle, NativeArray<float4>, NativeArray<float4>, NativeArray<float4>> func)
+    private static void TestJobOrJobParallelFor(Func<NativeArray<float4>, NativeArray<float4>, NativeArray<float4>, JobHandle> func)
     {
         NativeArray<float4> values1 = new NativeArray<float4>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
         NativeArray<float4> values2 = new NativeArray<float4>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
