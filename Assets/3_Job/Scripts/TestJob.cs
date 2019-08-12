@@ -7,6 +7,7 @@ using Unity.Jobs.LowLevel.Unsafe;
 using Unity.Mathematics;
 using Unity.Burst;
 
+#region Declaration
 enum CompareType
 {
     Equal,
@@ -109,7 +110,7 @@ struct FilterParallelForJob : IJobParallelFor
     [ReadOnly]
     public NativeArray<float> src;
     [WriteOnly]
-    public NativeQueue<float>.Concurrent results;
+    public NativeQueue<float>.ParallelWriter results;
 
     public void Execute(int index)
     {
@@ -229,6 +230,7 @@ struct WriteJobIndexParallelForJob : IJobParallelForWithJobIndex
         result[index] = jobIndex;
     }
 }
+#endregion
 
 class TestJob
 {
@@ -269,9 +271,10 @@ class TestJob
         }
     }
 
+    #region Test
     private static void TestIJob()
     {
-        TestJobOrJobParallelFor((values1, values2, results) =>
+        ExecuteJobOrJobParallelFor((values1, values2, results) =>
         {
 
             AddAllJob addAllJob1 = new AddAllJob();
@@ -295,17 +298,17 @@ class TestJob
 
     private static void TestIJobParallelFor()
     {
-        TestJobOrJobParallelFor((values1, values2, results) =>
+        ExecuteJobOrJobParallelFor((values1, values2, results) =>
         {
             AddAllParallelForJob addAllJob1 = new AddAllParallelForJob();
             addAllJob1.adder = 1;
             addAllJob1.values = values1;
-            JobHandle addAllJob1Handle = addAllJob1.Schedule(ARRAY_SIZE, 1);
+            JobHandle addAllJob1Handle = addAllJob1.Schedule(arrayLength: ARRAY_SIZE, innerloopBatchCount: 1);
 
             AddAllParallelForJob addAllJob2 = new AddAllParallelForJob();
             addAllJob2.adder = 1;
             addAllJob2.values = values2;
-            JobHandle addAllJob2Handle = addAllJob2.Schedule(ARRAY_SIZE, 1);
+            JobHandle addAllJob2Handle = addAllJob2.Schedule(arrayLength: ARRAY_SIZE, innerloopBatchCount: 1);
 
             AddParallelForJob addJob = new AddParallelForJob();
             addJob.a = values1;
@@ -319,7 +322,10 @@ class TestJob
     private static void TestScheduleBatchedJobs()
     {
         var stopwatch = new System.Diagnostics.Stopwatch();
-        NativeArray<float> values = new NativeArray<float>(BIG_ARRAY_SIZE, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        NativeArray<float> values = new NativeArray<float>(
+            length: BIG_ARRAY_SIZE,
+            allocator: Allocator.Persistent,
+            options: NativeArrayOptions.UninitializedMemory);
 
         for (int i = 0; i < ARRAY_SIZE; i++)
         {
@@ -329,7 +335,7 @@ class TestJob
         HeavyJob heavyJob = new HeavyJob();
         heavyJob.weight = 500;
         heavyJob.values = values;
-        JobHandle heavyJobHandle = heavyJob.Schedule(BIG_ARRAY_SIZE, 16);
+        JobHandle heavyJobHandle = heavyJob.Schedule(arrayLength: BIG_ARRAY_SIZE, innerloopBatchCount: 16);
 
         JobHandle.ScheduleBatchedJobs();
 
@@ -344,34 +350,13 @@ class TestJob
         values.Dispose();
     }
 
-    private static void TestJobOrJobParallelFor(Func<NativeArray<float4>, NativeArray<float4>, NativeArray<float4>, JobHandle> func)
-    {
-        NativeArray<float4> values1 = new NativeArray<float4>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
-        NativeArray<float4> values2 = new NativeArray<float4>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
-        NativeArray<float4> results = new NativeArray<float4>(ARRAY_SIZE, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-
-        for (int i = 0; i < ARRAY_SIZE; i++)
-        {
-            results[i] = 0;
-            values1[i] = new float4(1 + i, 2 + i, 3 + i, 4 + i);
-            values2[i] = new float4(1 + ARRAY_SIZE - i, 2 + ARRAY_SIZE - i, 3 + ARRAY_SIZE - i, 4 + ARRAY_SIZE - i); ;
-        }
-
-        JobHandle addJobHandle = func(values1, values2, results);
-
-        addJobHandle.Complete();
-
-        Print5Float4NativeArray(results);
-
-        values1.Dispose();
-        values2.Dispose();
-        results.Dispose();
-    }
-
     private static void TestNativeContainerConcurrent()
     {
-        NativeArray<float> values = new NativeArray<float>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
-        NativeQueue<float> result = new NativeQueue<float>(Allocator.Persistent);
+        NativeArray<float> values = new NativeArray<float>(
+            length: ARRAY_SIZE,
+            allocator: Allocator.TempJob,
+            options: NativeArrayOptions.UninitializedMemory);
+        NativeQueue<float> result = new NativeQueue<float>(label: Allocator.Persistent);
         result.Enqueue(10);
         result.Enqueue(11);
         result.Enqueue(12);
@@ -385,9 +370,9 @@ class TestJob
         filterJob.compareType = CompareType.MoreThan;
         filterJob.compareValue = 2;
         filterJob.src = values;
-        filterJob.results = result.ToConcurrent();
+        filterJob.results = result.AsParallelWriter();
 
-        JobHandle filterJobHandle = filterJob.Schedule(ARRAY_SIZE, 1);
+        JobHandle filterJobHandle = filterJob.Schedule(arrayLength: ARRAY_SIZE, innerloopBatchCount: 1);
         filterJobHandle.Complete();
 
         Print5FloatNativeQueue(result);
@@ -398,8 +383,11 @@ class TestJob
 
     private static void TestCustomNativeContainerConcurrent()
     {
-        NativeArray<int> candidates = new NativeArray<int>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
-        NativeMinMaxInt result = new NativeMinMaxInt(MinMax.Max, Allocator.Persistent);
+        NativeArray<int> candidates = new NativeArray<int>(
+            length: ARRAY_SIZE,
+            allocator: Allocator.TempJob,
+            options: NativeArrayOptions.UninitializedMemory);
+        NativeMinMaxInt result = new NativeMinMaxInt(mode: MinMax.Max, allocatorLabel: Allocator.Persistent);
 
         for (int i = 0; i < ARRAY_SIZE; i++)
         {
@@ -410,7 +398,7 @@ class TestJob
         minMaxintJob.candidates = candidates;
         minMaxintJob.result = result;
 
-        JobHandle minMaxIntJobHandle = minMaxintJob.Schedule(ARRAY_SIZE, 1);
+        JobHandle minMaxIntJobHandle = minMaxintJob.Schedule(arrayLength: ARRAY_SIZE, innerloopBatchCount: 1);
         minMaxIntJobHandle.Complete();
 
         Debug.Log(result.Value);
@@ -421,13 +409,19 @@ class TestJob
 
     private static void TestDeallocateOnJobCompletion()
     {
-        NativeArray<int> from = new NativeArray<int>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
-        NativeArray<int> to = new NativeArray<int>(ARRAY_SIZE, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        NativeMapInt map = new NativeMapInt(3, -1, Allocator.Persistent);
+        NativeArray<int> from = new NativeArray<int>(
+            length: ARRAY_SIZE,
+            allocator: Allocator.TempJob,
+            options: NativeArrayOptions.UninitializedMemory);
+        NativeArray<int> to = new NativeArray<int>(
+            length: ARRAY_SIZE,
+            allocator: Allocator.Persistent,
+            options: NativeArrayOptions.UninitializedMemory);
+        NativeMapInt map = new NativeMapInt(length: 3, defaultValue: -1, allocator: Allocator.Persistent);
 
-        map.Set(0, 1, 5);
-        map.Set(1, 2, 7);
-        map.Set(2, 4, 9);
+        map.Set(index: 0, from: 1, to: 5);
+        map.Set(index: 1, from: 2, to: 7);
+        map.Set(index: 2, from: 4, to: 9);
 
         for (int i = 0; i < ARRAY_SIZE; i++)
         {
@@ -439,7 +433,7 @@ class TestJob
         mapIntJob.map = map;
         mapIntJob.to = to;
 
-        JobHandle mapIntJobHandle = mapIntJob.Schedule(ARRAY_SIZE, 1);
+        JobHandle mapIntJobHandle = mapIntJob.Schedule(arrayLength: ARRAY_SIZE, innerloopBatchCount: 1);
         mapIntJobHandle.Complete();
 
         Print5IntNativeArray(to);
@@ -449,7 +443,10 @@ class TestJob
 
     private static void TestCustomJob()
     {
-        NativeArray<int> result = new NativeArray<int>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        NativeArray<int> result = new NativeArray<int>(
+            length: ARRAY_SIZE,
+            allocator: Allocator.TempJob,
+            options: NativeArrayOptions.UninitializedMemory);
 
         for (int i = 0; i < ARRAY_SIZE; i++)
         {
@@ -459,7 +456,7 @@ class TestJob
         AddWithIntJob addWithIntJob = new AddWithIntJob();
         addWithIntJob.result = result;
 
-        JobHandle addWithIntJobHandle = addWithIntJob.ScheduleWithInt(ARRAY_SIZE);
+        JobHandle addWithIntJobHandle = addWithIntJob.ScheduleWithInt(value: ARRAY_SIZE);
         addWithIntJobHandle.Complete();
 
         Print5IntNativeArray(result);
@@ -469,17 +466,63 @@ class TestJob
 
     private static void TestCustomJobParallelFor()
     {
-        NativeArray<int> result = new NativeArray<int>(ARRAY_SIZE, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        NativeArray<int> result = new NativeArray<int>(
+            length: ARRAY_SIZE,
+            allocator: Allocator.TempJob,
+            options: NativeArrayOptions.UninitializedMemory);
 
         WriteJobIndexParallelForJob writeJobIndexJob = new WriteJobIndexParallelForJob();
         writeJobIndexJob.result = result;
 
-        JobHandle writeJobIndexJobHandle = writeJobIndexJob.Schedule(ARRAY_SIZE, 2);
+        JobHandle writeJobIndexJobHandle = writeJobIndexJob.Schedule(arrayLength: ARRAY_SIZE, innerloopBatchCount: 2);
         writeJobIndexJobHandle.Complete();
 
         Print5IntNativeArray(result);
 
         result.Dispose();
+    }
+    #endregion
+
+    #region Helper
+    private static void ExecuteJobOrJobParallelFor(Func<NativeArray<float4>, NativeArray<float4>, NativeArray<float4>, JobHandle> func)
+    {
+        NativeArray<float4> values1 = new NativeArray<float4>(
+            length: ARRAY_SIZE,
+            allocator: Allocator.TempJob,
+            options: NativeArrayOptions.UninitializedMemory);
+        NativeArray<float4> values2 = new NativeArray<float4>(
+            length: ARRAY_SIZE,
+            allocator: Allocator.TempJob,
+            options: NativeArrayOptions.UninitializedMemory);
+        NativeArray<float4> results = new NativeArray<float4>(
+            length: ARRAY_SIZE,
+            allocator: Allocator.Persistent,
+            options: NativeArrayOptions.UninitializedMemory);
+
+        for (int i = 0; i < ARRAY_SIZE; i++)
+        {
+            results[i] = 0;
+            values1[i] = new float4(
+                1 + i,
+                2 + i,
+                3 + i,
+                4 + i);
+            values2[i] = new float4(
+                1 + ARRAY_SIZE - i,
+                2 + ARRAY_SIZE - i,
+                3 + ARRAY_SIZE - i,
+                4 + ARRAY_SIZE - i);
+        }
+
+        JobHandle addJobHandle = func(values1, values2, results);
+
+        addJobHandle.Complete();
+
+        Print5Float4NativeArray(results);
+
+        values1.Dispose();
+        values2.Dispose();
+        results.Dispose();
     }
 
     private static void Print5Float4NativeArray(NativeArray<float4> float4s)
@@ -509,4 +552,5 @@ class TestJob
     {
         Debug.Log($"{queue.Dequeue()}, {queue.Dequeue()}, {queue.Dequeue()}, {queue.Dequeue()}, {queue.Dequeue()}");
     }
+    #endregion
 }

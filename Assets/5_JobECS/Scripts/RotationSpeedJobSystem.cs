@@ -10,11 +10,15 @@ using Unity.Transforms;
 [BurstCompile]
 struct RotationSpeedJob : IJobForEach<Rotation, RotationSpeed>
 {
+    [ReadOnly]
     public float deltaTime;
 
     public void Execute(ref Rotation rotation, [ReadOnly] ref RotationSpeed rotationSpeed)
     {
-        rotation.Value = math.mul(math.normalize(rotation.Value), quaternion.AxisAngle(new float3(1, 0, 0), rotationSpeed.speed * deltaTime));
+        rotation.Value = math.mul(math.normalize(rotation.Value),
+        quaternion.AxisAngle(
+            axis: new float3(1, 0, 0),
+            angle: rotationSpeed.speed * deltaTime));
     }
 }
 

@@ -10,9 +10,13 @@ using Unity.Transforms;
 [BurstCompile]
 struct RotationSpeedJobChunk : IJobChunk
 {
+    [ReadOnly]
     public float deltaTime;
+
     public ArchetypeChunkComponentType<Rotation> rotationType;
-    [ReadOnly] public ArchetypeChunkComponentType<RotationSpeed> rotationSpeedType;
+
+    [ReadOnly]
+    public ArchetypeChunkComponentType<RotationSpeed> rotationSpeedType;
 
     public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
     {
@@ -26,7 +30,10 @@ struct RotationSpeedJobChunk : IJobChunk
 
             chunkRotations[i] = new Rotation
             {
-                Value = math.mul(math.normalize(rotation.Value), quaternion.AxisAngle(new float3(0, 0, 1), rotationSpeed.speed * deltaTime))
+                Value = math.mul(math.normalize(rotation.Value),
+                quaternion.AxisAngle(
+                    axis: new float3(0, 0, 1),
+                    angle: rotationSpeed.speed * deltaTime))
             };
         }
     }
@@ -50,8 +57,8 @@ class RotationSpeedJobChunkSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
-        var rotationType = GetArchetypeChunkComponentType<Rotation>(false);
-        var rotationSpeedType = GetArchetypeChunkComponentType<RotationSpeed>(true);
+        var rotationType = GetArchetypeChunkComponentType<Rotation>(isReadOnly: false);
+        var rotationSpeedType = GetArchetypeChunkComponentType<RotationSpeed>(isReadOnly: true);
 
         var job = new RotationSpeedJobChunk()
         {

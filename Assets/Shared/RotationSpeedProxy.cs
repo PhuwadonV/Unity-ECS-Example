@@ -8,7 +8,6 @@ public struct RotationSpeed : IComponentData
 
 [AddComponentMenu("ECS/RotationSpeed")]
 [DisallowMultipleComponent]
-[RequireComponent(typeof(ConvertToEntity))]
 [RequiresEntityConversion]
 public class RotationSpeedProxy : MonoBehaviour, IConvertGameObjectToEntity
 {
@@ -16,6 +15,6 @@ public class RotationSpeedProxy : MonoBehaviour, IConvertGameObjectToEntity
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
-        dstManager.AddComponentData(entity, new RotationSpeed { speed = speed });
+        dstManager.AddComponentData(entity: entity, componentData: new RotationSpeed { speed = speed });
     }
 }

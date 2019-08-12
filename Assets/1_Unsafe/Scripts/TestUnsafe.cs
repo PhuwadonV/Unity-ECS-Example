@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#region Declaration
 [StructLayout(LayoutKind.Explicit)]
 struct Union
 {
@@ -56,6 +57,7 @@ unsafe class ColorClass
     public float g = 0;
     public float* b = null;
 }
+#endregion
 
 class TestUnsafe
 {
@@ -64,7 +66,7 @@ class TestUnsafe
     {
         if (SceneManager.GetActiveScene().name.Equals("Unsafe"))
         {
-            TestPointer(100);
+            TestPointer(count: 100);
             Debug.Log("<color=red>Union</color>");
             TestUnion();
             Debug.Log("<color=red>PointPack4</color>");
@@ -74,6 +76,7 @@ class TestUnsafe
         }
     }
 
+    #region Test
     private static async void TestPointer(int count)
     {
         for (int i = 0; Application.isPlaying && i < count; i++)
@@ -101,7 +104,11 @@ class TestUnsafe
 
         if (Camera.main)
         {
-            Camera.main.backgroundColor = new Color(color.r, color.g, *color.b, 0);
+            Camera.main.backgroundColor = new Color(
+                r: color.r,
+                g: color.g,
+                b: *color.b,
+                a: 0);
         }
     }
 
@@ -118,7 +125,11 @@ class TestUnsafe
 
         if (Camera.main)
         {
-            Camera.main.backgroundColor = new Color(color.r, color.g, *color.b, 0);
+            Camera.main.backgroundColor = new Color(
+                r: color.r,
+                g: color.g,
+                b: *color.b,
+                a: 0);
         }
     }
 
@@ -176,7 +187,9 @@ class TestUnsafe
 
         Debug.Log(point);
     }
+    #endregion
 
+    #region Helper
     private unsafe static void ModifyStruct(ColorStruct* pColor)
     {
         pColor->r = 1;
@@ -186,4 +199,5 @@ class TestUnsafe
     {
         *pFloat = 1;
     }
+    #endregion
 }

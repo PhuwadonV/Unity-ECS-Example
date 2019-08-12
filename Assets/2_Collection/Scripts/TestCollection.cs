@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
+#region Declaration
 enum Vowel
 {
     A,
@@ -27,6 +28,7 @@ struct Int4
         return $"{this._0}, {this._1}, {this._2}, {this._3}";
     }
 }
+#endregion
 
 class TestCollection
 {
@@ -49,11 +51,18 @@ class TestCollection
         }
     }
 
+    #region Test
     private unsafe static void TestUnsafeUtility()
     {
-        // Alocate
-        void* a = UnsafeUtility.Malloc(ARRAY_SIZE * UnsafeUtility.SizeOf<int>(), UnsafeUtility.AlignOf<byte>(), Allocator.Temp);
-        void* b = UnsafeUtility.Malloc(ARRAY_SIZE * UnsafeUtility.SizeOf<int>(), UnsafeUtility.AlignOf<byte>(), Allocator.Temp);
+        // Allocate
+        void* a = UnsafeUtility.Malloc(
+            size: ARRAY_SIZE * UnsafeUtility.SizeOf<int>(),
+            alignment: UnsafeUtility.AlignOf<byte>(),
+            allocator: Allocator.Temp);
+        void* b = UnsafeUtility.Malloc(
+            size: ARRAY_SIZE * UnsafeUtility.SizeOf<int>(),
+            alignment: UnsafeUtility.AlignOf<byte>(),
+            allocator: Allocator.Temp);
 
         for (int i = 0; i < ARRAY_SIZE; i++)
         {
@@ -61,19 +70,22 @@ class TestCollection
         }
 
         Print5IntArray((int*)b);
-        UnsafeUtility.MemCpy(b, a, ARRAY_SIZE * UnsafeUtility.SizeOf<int>());
+        UnsafeUtility.MemCpy(destination: b, source: a, size: ARRAY_SIZE * UnsafeUtility.SizeOf<int>());
         Print5IntArray((int*)b);
 
         for (int i = 0; i < ARRAY_SIZE; i++)
         {
-            UnsafeUtility.WriteArrayElement(b, i, -i);
+            UnsafeUtility.WriteArrayElement(
+                destination: b,
+                index: i,
+                value: -i);
         }
 
         Print5IntFromVoidArray(b);
 
         // Free
-        UnsafeUtility.Free(a, Allocator.Temp);
-        UnsafeUtility.Free(b, Allocator.Temp);
+        UnsafeUtility.Free(memory: a, allocator: Allocator.Temp);
+        UnsafeUtility.Free(memory: b, allocator: Allocator.Temp);
 
         Debug.Log($"Vowel.I : {UnsafeUtility.EnumToInt(Vowel.I)}");
 
@@ -85,8 +97,8 @@ class TestCollection
 
     private static async Task<NativeArray<int>> TestNativeArray()
     {
-        NativeArray<int> persistent = new NativeArray<int>(ARRAY_SIZE, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        NativeArray<int> temp = new NativeArray<int>(ARRAY_SIZE, Allocator.Temp);
+        NativeArray<int> persistent = new NativeArray<int>(length: ARRAY_SIZE, allocator: Allocator.Persistent, options: NativeArrayOptions.UninitializedMemory);
+        NativeArray<int> temp = new NativeArray<int>(length: ARRAY_SIZE, allocator: Allocator.Temp);
 
         // Log value
         Debug.Log(temp[0]);
@@ -110,7 +122,7 @@ class TestCollection
         System.IntPtr a = Marshal.StringToHGlobalAnsi("A");
         System.IntPtr b = Marshal.StringToHGlobalAnsi("B");
         System.IntPtr c = Marshal.StringToHGlobalAnsi("C");
-        NativeHashMap<int, System.IntPtr> hashMap = new NativeHashMap<int, System.IntPtr>(3, Allocator.Persistent);
+        NativeHashMap<int, System.IntPtr> hashMap = new NativeHashMap<int, System.IntPtr>(capacity: 3, allocator: Allocator.Persistent);
         {
             hashMap.TryAdd(0, a);
             hashMap.TryAdd(1, b);
@@ -130,16 +142,17 @@ class TestCollection
         Marshal.FreeHGlobal(a);
         Marshal.FreeHGlobal(b);
         Marshal.FreeHGlobal(c);
-
     }
+    #endregion
 
+    #region Helper
     private unsafe static void ModifyInt4ByAddressOfRef(ref Int4 value)
     {
         void* pVoid = UnsafeUtility.AddressOf(ref value);
-        UnsafeUtility.WriteArrayElement(pVoid, 0, 4);
-        UnsafeUtility.WriteArrayElement(pVoid, 1, 3);
-        UnsafeUtility.WriteArrayElement(pVoid, 2, 2);
-        UnsafeUtility.WriteArrayElement(pVoid, 3, 1);
+        UnsafeUtility.WriteArrayElement(destination: pVoid, index: 0, value: 4);
+        UnsafeUtility.WriteArrayElement(destination: pVoid, index: 1, value: 3);
+        UnsafeUtility.WriteArrayElement(destination: pVoid, index: 2, value: 2);
+        UnsafeUtility.WriteArrayElement(destination: pVoid, index: 3, value: 1);
     }
 
     private unsafe static void Print5IntArray(int* pInt)
@@ -150,10 +163,11 @@ class TestCollection
     private unsafe static void Print5IntFromVoidArray(void* pVoid)
     {
         Debug.Log(
-            $"{UnsafeUtility.ReadArrayElement<int>(pVoid, 0)}, " +
-            $"{UnsafeUtility.ReadArrayElement<int>(pVoid, 1)}, " +
-            $"{UnsafeUtility.ReadArrayElement<int>(pVoid, 2)}, " +
-            $"{UnsafeUtility.ReadArrayElement<int>(pVoid, 3)}, " +
-            $"{UnsafeUtility.ReadArrayElement<int>(pVoid, 4)}");
+            $"{UnsafeUtility.ReadArrayElement<int>(source: pVoid, index: 0)}, " +
+            $"{UnsafeUtility.ReadArrayElement<int>(source: pVoid, index: 1)}, " +
+            $"{UnsafeUtility.ReadArrayElement<int>(source: pVoid, index: 2)}, " +
+            $"{UnsafeUtility.ReadArrayElement<int>(source: pVoid, index: 3)}, " +
+            $"{UnsafeUtility.ReadArrayElement<int>(source: pVoid, index: 4)}");
     }
+    #endregion
 }
