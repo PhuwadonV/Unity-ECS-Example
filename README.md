@@ -17,7 +17,7 @@
 
 # Burst
 
-- [Manual](https://docs.unity3d.com/Packages/com.unity.burst@0.2/manual/index.html)
+- [Manual](https://docs.unity3d.com/Packages/com.unity.burst@1.1/manual/index.html)
 
 # Entities
 
@@ -25,7 +25,7 @@
 
 # Physics
 
-- [Manual](https://docs.unity3d.com/Packages/com.unity.physics@0.1/manual/index.html)
+- [Manual](https://docs.unity3d.com/Packages/com.unity.physics@0.2/manual/index.html)
 
 ## Unity.Entities
 
