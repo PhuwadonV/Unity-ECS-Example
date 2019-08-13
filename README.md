@@ -58,11 +58,14 @@
 ### Attribute for component
 
 - [DisableAutoTypeRegistration](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.DisableAutoTypeRegistration.html)
-- [ExcludeComponentAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ExcludeComponentAttribute.html)
 - [InternalBufferCapacityAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.InternalBufferCapacityAttribute.html)
 - [MaximumChunkCapacityAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.MaximumChunkCapacityAttribute.html)
-- [RequireComponentTagAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.RequireComponentTagAttribute.html)
 - [WriteGroupAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.WriteGroupAttribute.html)
+
+### Attribute for IJobForEach
+
+- [ExcludeComponentAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ExcludeComponentAttribute.html)
+- [RequireComponentTagAttribute](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.RequireComponentTagAttribute.html)
 
 ### Attribute for MonoBehaviour
 
