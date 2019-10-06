@@ -17,7 +17,7 @@
 
 # Burst
 
-- [Manual](https://docs.unity3d.com/Packages/com.unity.burst@1.1/manual/index.html)
+- [Manual](https://docs.unity3d.com/Packages/com.unity.burst@1.2/manual/index.html)
 
 # Entities
 
@@ -144,10 +144,6 @@
 
 ### Struct
 
-- [ArchetypeChunkArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkArray.html)
-- [ArchetypeChunkComponentObjects](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkComponentObjects-1.html)
-- [ArchetypeChunkComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkComponentType-1.html)
-- [ArchetypeChunkEntityType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkEntityType.html)
 - [BlobArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobArray-1.html)
 - [BlobPtr](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobPtr-1.html)
 - [BlobString](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobString.html)
@@ -181,7 +177,6 @@
 
 ### Struct with public constructor or public static SelfType method
 
-- [ArchetypeChunk](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunk.html)
 - [BlobAssetReference](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobAssetReference-1.html)
 - [BlobBuilder](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobBuilder.html)
 - [BlobBuilderArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobBuilderArray-1.html)
@@ -220,14 +215,12 @@
 
 ### Struct : IBufferElementData
 
-- [ArchetypeChunkBufferType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkBufferType-1.html)
 - [BufferAccessor](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BufferAccessor-1.html)
 - [BufferFromEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BufferFromEntity-1.html)
 - [LinkedEntityGroup](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.LinkedEntityGroup.html)
 
 ### Struct : ISharedComponentData
 
-- [ArchetypeChunkSharedComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkSharedComponentType-1.html)
 - [EditorRenderData](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EditorRenderData.html)
 - [SceneSection](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.SceneSection.html)
 - [SceneTag](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.SceneTag.html)
@@ -240,21 +233,40 @@
 
 - [MemsetNativeArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.MemsetNativeArray-1.html)
 
+### Struct : ArchetypeChunk
+
+- [ArchetypeChunk](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunk.html)
+- [ArchetypeChunkArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkArray.html)
+- [ArchetypeChunkBufferType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkBufferType-1.html)
+- [ArchetypeChunkComponentObjects](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkComponentObjects-1.html)
+- [ArchetypeChunkComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkComponentType-1.html)
+- [ArchetypeChunkEntityType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkEntityType.html)
+- [ArchetypeChunkSharedComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkSharedComponentType-1.html)
+
 ### Interface
 
 - [EntityManagerBaseInterfaceForObsolete](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityManagerBaseInterfaceForObsolete.html)
+- [ICustomBootstrap](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ICustomBootstrap.html)
+- [IDynamicBufferContainer](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IDynamicBufferContainer.html)
+- [IRefCounted](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IRefCounted.html)
+- [JobForEachExtensions.IBaseJobForEach](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.JobForEachExtensions.IBaseJobForEach.html)
+
+### Interface : Component
+
 - [IBufferElementData](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IBufferElementData.html)
 - [IComponentData](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IComponentData.html)
-- [IConvertGameObjectToEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IConvertGameObjectToEntity.html)
-- [ICustomBootstrap](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ICustomBootstrap.html)
-- [IDeclareReferencedPrefabs](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IDeclareReferencedPrefabs.html)
-- [IDynamicBufferContainer](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IDynamicBufferContainer.html)
-- [IJobChunk](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IJobChunk.html)
-- [IJobForEach](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IJobForEach-1.html)
-- [IJobForEachWithEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IJobForEachWithEntity-1.html)
-- [IRefCounted](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IRefCounted.html)
 - [ISharedComponentData](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ISharedComponentData.html)
 - [ISystemStateBufferElementData](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ISystemStateBufferElementData.html)
 - [ISystemStateComponentData](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ISystemStateComponentData.html)
 - [ISystemStateSharedComponentData](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ISystemStateSharedComponentData.html)
-- [JobForEachExtensions.IBaseJobForEach](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.JobForEachExtensions.IBaseJobForEach.html)
+
+### Interface : Job
+
+- [IJobChunk](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IJobChunk.html)
+- [IJobForEach](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IJobForEach-1.html)
+- [IJobForEachWithEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IJobForEachWithEntity-1.html)
+
+### Interface : MonoBehaviour
+
+- [IConvertGameObjectToEntity](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IConvertGameObjectToEntity.html)
+- [IDeclareReferencedPrefabs](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.IDeclareReferencedPrefabs.html)
