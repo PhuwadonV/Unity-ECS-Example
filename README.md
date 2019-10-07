@@ -144,13 +144,8 @@
 
 ### Struct
 
-- [BlobArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobArray-1.html)
-- [BlobPtr](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobPtr-1.html)
-- [BlobString](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobString.html)
 - [ComponentTypeHash](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ComponentTypeHash.html)
 - [ComponentTypes.Masks](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ComponentTypes.Masks.html)
-- [DynamicBuffer](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.DynamicBuffer-1.html)
-- [EntityArchetype](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityArchetype.html)
 - [EntityCommandBuffer.Concurrent](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityCommandBuffer.Concurrent.html)
 - [EntityQueryBuilder](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityQueryBuilder.html)
 - [EntityReferenceChange](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityReferenceChange.html)
@@ -177,17 +172,9 @@
 
 ### Struct with public constructor or public static SelfType method
 
-- [BlobAssetReference](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobAssetReference-1.html)
-- [BlobBuilder](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobBuilder.html)
-- [BlobBuilderArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobBuilderArray-1.html)
-- [BuildComponentDataToEntityLookupTask](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BuildComponentDataToEntityLookupTask-1.html)
 - [ComponentSystemGroup.TypeHeapElement](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ComponentSystemGroup.TypeHeapElement.html)
-- [ComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ComponentType.html)
-- [ComponentTypes](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ComponentTypes.html)
-- [Entity](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.Entity.html)
 - [EntityChanges](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityChanges.html)
 - [EntityChangeSet](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityChangeSet.html)
-- [EntityCommandBuffer](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityCommandBuffer.html)
 - [EntityContainer](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityContainer.html)
 - [EntityManagerDiffer](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityManagerDiffer.html)
 - [EntityManagerPatcher](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityManagerPatcher.html)
@@ -200,6 +187,35 @@
 - [TypeManager.FieldInfo](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.TypeManager.FieldInfo.html)
 - [TypeManager.TypeInfo](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.TypeManager.TypeInfo.html)
 - [TypeManager.TypeInfoDebug](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.TypeManager.TypeInfoDebug.html)
+
+### Struct : Highlight
+
+- [ComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ComponentType.html)
+- [ComponentTypes](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ComponentTypes.html)
+- [DynamicBuffer](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.DynamicBuffer-1.html)
+- [Entity](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.Entity.html)
+- [EntityArchetype](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityArchetype.html)
+- [EntityCommandBuffer](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.EntityCommandBuffer.html)
+
+### Struct : ArchetypeChunk
+
+- [ArchetypeChunk](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunk.html)
+- [ArchetypeChunkArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkArray.html)
+- [ArchetypeChunkBufferType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkBufferType-1.html)
+- [ArchetypeChunkComponentObjects](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkComponentObjects-1.html)
+- [ArchetypeChunkComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkComponentType-1.html)
+- [ArchetypeChunkEntityType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkEntityType.html)
+- [ArchetypeChunkSharedComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkSharedComponentType-1.html)
+
+### Struct : Blob
+
+- [BlobArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobArray-1.html)
+- [BlobAssetReference](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobAssetReference-1.html)
+- [BlobBuilder](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobBuilder.html)
+- [BlobBuilderArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobBuilderArray-1.html)
+- [BuildComponentDataToEntityLookupTask](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BuildComponentDataToEntityLookupTask-1.html)
+- [BlobPtr](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobPtr-1.html)
+- [BlobString](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.BlobString.html)
 
 ### Struct : IComponentData
 
@@ -232,16 +248,6 @@
 ### Struct : IJobParallelFor
 
 - [MemsetNativeArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.MemsetNativeArray-1.html)
-
-### Struct : ArchetypeChunk
-
-- [ArchetypeChunk](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunk.html)
-- [ArchetypeChunkArray](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkArray.html)
-- [ArchetypeChunkBufferType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkBufferType-1.html)
-- [ArchetypeChunkComponentObjects](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkComponentObjects-1.html)
-- [ArchetypeChunkComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkComponentType-1.html)
-- [ArchetypeChunkEntityType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkEntityType.html)
-- [ArchetypeChunkSharedComponentType](https://docs.unity3d.com/Packages/com.unity.entities@0.1/api/Unity.Entities.ArchetypeChunkSharedComponentType-1.html)
 
 ### Interface
 
